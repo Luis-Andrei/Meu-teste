@@ -1,0 +1,47 @@
+name: Testes Automatizados Go + PostgreSQL
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: yourpassword
+          POSTGRES_DB: bankdb
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Configurar Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: '1.21'
+
+      - name: Instalar dependências
+        run: go mod download
+
+      - name: Configurar variáveis de ambiente
+        run: |
+          echo "DB_USER=postgres" >> $GITHUB_ENV
+          echo "DB_PASS=yourpassword" >> $GITHUB_ENV
+          echo "DB_NAME=bankdb" >> $GITHUB_ENV
+          echo "DB_HOST=localhost" >> $GITHUB_ENV
+
+      - name: Executar testes
+        run: go test -v ./... 
