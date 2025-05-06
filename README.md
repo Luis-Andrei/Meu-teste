@@ -1,130 +1,186 @@
-# Bank Server API 🏦
+# Meu Projeto - Sistema de Autenticação
 
-![Go Tests](https://github.com/Luis-Andrei/bank-server/actions/workflows/tests-and-deploy.yml/badge.svg)
-[![Coverage](https://codecov.io/gh/Luis-Andrei/bank-server/branch/main/graph/badge.svg)](https://codecov.io/gh/Luis-Andrei/bank-server)
-[![Deploy Status](https://vercelbadge.vercel.app/Luis-Andrei/bank-server)](https://vercel.com)
+Sistema completo de autenticação com React, Node.js, MongoDB e TypeScript.
 
-API de sistema bancário desenvolvida em Go com testes automatizados e CI/CD.
+## 🚀 Tecnologias
 
-## 🚀 Funcionalidades
+### Frontend
+- React 18
+- TypeScript
+- Vite
+- React Router DOM
+- React Hook Form
+- Yup
+- Axios
+- React Hot Toast
+- Tailwind CSS
+- Vitest (Testes)
+- React Testing Library
 
-- Criação de contas
-- Consulta de saldo
-- Depósito
-- Saque
-- Testes automatizados
-- CI/CD com GitHub Actions
-- Deploy automático para Vercel
-- Containerização com Docker
-- Notificações de falha no Slack e Discord
-- Testes de Performance com k6
+### Backend
+- Node.js
+- Express
+- TypeScript
+- MongoDB
+- Mongoose
+- JWT
+- Bcrypt
+- Yup
+- Jest (Testes)
+- Supertest
 
-## 🛠️ Tecnologias
+## 📦 Instalação
 
-- Go 1.21
-- PostgreSQL
-- GitHub Actions
-- Codecov
-- Vercel
-- Docker
-- Slack e Discord (notificações)
-- k6 (testes de performance)
-
-## 📋 Pré-requisitos
-
-- Go 1.21 ou superior
-- Docker (para rodar o PostgreSQL)
+### Pré-requisitos
+- Node.js 18+
+- MongoDB
 - Git
-- k6 (para testes de performance)
-- Node.js (para o Vercel CLI)
 
-## 🔧 Instalação
-
-1. Clone o repositório:
+### Backend
 ```bash
-git clone https://github.com/Luis-Andrei/bank-server.git
-cd bank-server
+# Entrar no diretório do backend
+cd server
+
+# Instalar dependências
+npm install
+
+# Configurar variáveis de ambiente
+cp .env.example .env
+# Edite o arquivo .env com suas configurações
+
+# Iniciar em desenvolvimento
+npm run dev
+
+# Rodar testes
+npm test
+
+# Rodar lint
+npm run lint
 ```
 
-2. Instale as dependências:
+### Frontend
 ```bash
-go mod download
-```
+# Entrar no diretório do frontend
+cd client
 
-3. Configure as variáveis de ambiente:
-```bash
-export DB_USER=postgres
-export DB_PASS=yourpassword
-export DB_NAME=bankdb
-export DB_HOST=localhost
+# Instalar dependências
+npm install
+
+# Iniciar em desenvolvimento
+npm run dev
+
+# Rodar testes
+npm test
+
+# Rodar testes com cobertura
+npm run test:coverage
+
+# Rodar lint
+npm run lint
 ```
 
 ## 🧪 Testes
 
-Para executar os testes localmente:
+### Backend
+Os testes do backend são escritos com Jest e Supertest. Para executar:
+
 ```bash
-go test ./handlers -v
+cd server
+npm test
+```
+
+### Frontend
+Os testes do frontend são escritos com Vitest e React Testing Library. Para executar:
+
+```bash
+cd client
+npm test
 ```
 
 Para ver a cobertura de testes:
 ```bash
-go test ./handlers -cover
+npm run test:coverage
 ```
 
-Para executar testes de performance:
-```bash
-k6 run tests/performance.js
+## 🔄 CI/CD
+
+O projeto usa GitHub Actions para CI/CD. O pipeline inclui:
+
+1. **Testes e Build**
+   - Instalação de dependências
+   - Execução de testes (frontend e backend)
+   - Build do projeto
+   - Linting
+
+2. **Deploy** (apenas na branch main)
+   - Deploy do backend
+   - Deploy do frontend
+
+### Secrets Necessárias
+Configure as seguintes secrets no GitHub:
+- `MONGODB_URI_TEST`: URI do MongoDB para testes
+- `JWT_SECRET_TEST`: Chave secreta para JWT em testes
+- `SSH_PRIVATE_KEY`: Chave SSH para deploy
+- `SSH_HOST`: Host do servidor de produção
+
+## 📝 Estrutura do Projeto
+
+```
+meu-projeto/
+├── client/              → Frontend (React + Vite + Tailwind)
+│   ├── public/
+│   ├── src/
+│   │   ├── assets/
+│   │   ├── components/
+│   │   │   └── ProtectedRoute.tsx
+│   │   ├── pages/
+│   │   │   ├── Login.tsx
+│   │   │   ├── Signup.tsx
+│   │   │   └── Dashboard.tsx
+│   │   ├── test/
+│   │   │   └── setup.ts
+│   │   ├── App.tsx
+│   │   ├── main.tsx
+│   │   └── index.css
+│   ├── tailwind.config.js
+│   ├── postcss.config.js
+│   ├── vite.config.ts
+│   ├── vitest.config.ts
+│   ├── tsconfig.json
+│   └── package.json
+│
+├── server/              → Backend (Node + Express + MongoDB)
+│   ├── controllers/
+│   │   └── authController.js
+│   ├── middleware/
+│   │   ├── authMiddleware.js
+│   │   ├── errorMiddleware.js
+│   │   └── validationMiddleware.js
+│   ├── models/
+│   │   └── User.js
+│   ├── routes/
+│   │   └── authRoutes.js
+│   ├── validations/
+│   │   └── authValidation.js
+│   ├── .env
+│   ├── app.js
+│   ├── server.js
+│   └── package.json
+│
+└── .github/
+    └── workflows/
+        └── ci-cd.yml
 ```
 
-## 🐳 Docker
+## 🔒 Segurança
 
-Para construir a imagem Docker:
-```bash
-docker build -t bank-server .
-```
-
-Para rodar o container:
-```bash
-docker run -p 8080:8080 bank-server
-```
-
-## 📦 CI/CD
-
-O projeto utiliza GitHub Actions para:
-- Executar testes automatizados
-- Gerar relatório de cobertura
-- Fazer deploy automático para Vercel
-- Criar e publicar imagem Docker
-- Enviar notificações de falha para Slack e Discord
-- Executar testes de performance com k6
-
-## 🔐 Secrets Necessários
-
-Para que o CI/CD funcione corretamente, você precisa configurar os seguintes secrets no GitHub:
-
-- `CODECOV_TOKEN`: Token do Codecov
-- `VERCEL_TOKEN`: Token do Vercel
-- `SLACK_WEBHOOK_URL`: URL do webhook do Slack
-- `DISCORD_WEBHOOK_URL`: URL do webhook do Discord
+- Validação de dados com Yup
+- Autenticação com JWT
+- Senhas criptografadas com Bcrypt
+- Proteção contra CSRF
+- Rate limiting
+- Sanitização de inputs
 
 ## 📄 Licença
 
-Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
-
-## Configuração do Ambiente
-
-### 1. Banco de Dados PostgreSQL
-
-Você pode rodar o PostgreSQL localmente usando Docker:
-
-```bash
-docker run --rm -d -p 5432:5432 \
-  -e POSTGRES_USER=postgres \
-  -e POSTGRES_PASSWORD=yourpassword \
-  -e POSTGRES_DB=bankdb \
-  postgres:15
-```
-
-## Estrutura do Projeto
-
-- `handlers/`: Contém os handlers HTTP e seus testes
+Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes. 

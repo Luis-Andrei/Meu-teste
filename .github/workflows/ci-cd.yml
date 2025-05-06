@@ -1,0 +1,92 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  test-and-build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+        cache: 'npm'
+
+    # Backend
+    - name: Install Backend Dependencies
+      working-directory: ./server
+      run: npm ci
+
+    - name: Run Backend Tests
+      working-directory: ./server
+      run: npm test
+      env:
+        NODE_ENV: test
+        MONGODB_URI: ${{ secrets.MONGODB_URI_TEST }}
+        JWT_SECRET: ${{ secrets.JWT_SECRET_TEST }}
+
+    - name: Build Backend
+      working-directory: ./server
+      run: npm run build
+
+    # Frontend
+    - name: Install Frontend Dependencies
+      working-directory: ./client
+      run: npm ci
+
+    - name: Run Frontend Tests
+      working-directory: ./client
+      run: npm test
+
+    - name: Build Frontend
+      working-directory: ./client
+      run: npm run build
+
+  deploy:
+    needs: test-and-build
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+        cache: 'npm'
+
+    # Deploy Backend
+    - name: Deploy Backend
+      working-directory: ./server
+      run: |
+        echo "Deploying backend..."
+        # Adicione aqui os comandos para deploy do backend
+        # Por exemplo, usando SSH para conectar ao servidor:
+        # ssh ${{ secrets.SSH_HOST }} "cd /path/to/server && git pull && npm install && pm2 restart server"
+      env:
+        SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+        SSH_HOST: ${{ secrets.SSH_HOST }}
+
+    # Deploy Frontend
+    - name: Deploy Frontend
+      working-directory: ./client
+      run: |
+        echo "Deploying frontend..."
+        # Adicione aqui os comandos para deploy do frontend
+        # Por exemplo, usando SSH para conectar ao servidor:
+        # ssh ${{ secrets.SSH_HOST }} "cd /path/to/client && git pull && npm install && npm run build"
+      env:
+        SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
+        SSH_HOST: ${{ secrets.SSH_HOST }} 
