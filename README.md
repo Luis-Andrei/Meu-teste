@@ -1,185 +1,162 @@
-# Meu Projeto - Sistema de Autenticação
+# Projetos Integrados 🚀
 
-Sistema completo de autenticação com React, Node.js, MongoDB e TypeScript.
+Este repositório integra vários projetos desenvolvidos durante os cursos, criando um ecossistema completo de aplicações.
 
-## 🚀 Tecnologias
+## 📦 Projetos Integrados
+
+### 1. Sistema de Autenticação (auth-service)
+- Frontend: React + TypeScript + Vite
+- Backend: Node.js + Express + MongoDB
+- Funcionalidades:
+  - Autenticação JWT
+  - Registro e Login
+  - Proteção de rotas
+  - Validação de dados
+
+### 2. E-commerce (ecommerce-service)
+- Frontend: HTML/CSS/JavaScript
+- Backend: Python + Flask
+- Funcionalidades:
+  - Catálogo de produtos
+  - Carrinho de compras
+  - Sistema de pagamentos
+  - Área do cliente
+
+### 3. Sistema Bancário (bank-service)
+- Backend: Go
+- Funcionalidades:
+  - Criação de contas
+  - Transferências
+  - Consulta de saldo
+  - Histórico de transações
+
+### 4. API de Integração (api-gateway)
+- Backend: Go + Node.js
+- Funcionalidades:
+  - Roteamento de requisições
+  - Autenticação centralizada
+  - Rate limiting
+  - Logging
+
+## 🛠️ Tecnologias Utilizadas
 
 ### Frontend
 - React 18
 - TypeScript
 - Vite
-- React Router DOM
-- React Hook Form
-- Yup
-- Axios
-- React Hot Toast
 - Tailwind CSS
-- Vitest (Testes)
-- React Testing Library
+- HTML/CSS/JavaScript
 
 ### Backend
-- Node.js
-- Express
-- TypeScript
+- Node.js + Express
+- Go
+- Python + Flask
 - MongoDB
-- Mongoose
-- JWT
-- Bcrypt
-- Yup
-- Jest (Testes)
-- Supertest
+- PostgreSQL
 
-## 📦 Instalação
+### DevOps
+- Docker
+- Docker Compose
+- GitHub Actions
+- Nginx
 
-### Pré-requisitos
+## 📋 Pré-requisitos
+
 - Node.js 18+
+- Go 1.21+
+- Python 3.8+
+- Docker
 - MongoDB
-- Git
+- PostgreSQL
 
-### Backend
+## 🔧 Instalação
+
+1. Clone o repositório:
 ```bash
-# Entrar no diretório do backend
-cd server
+git clone https://github.com/seu-usuario/projetos-integrados.git
+cd projetos-integrados
+```
 
-# Instalar dependências
-npm install
-
-# Configurar variáveis de ambiente
+2. Configure as variáveis de ambiente:
+```bash
 cp .env.example .env
 # Edite o arquivo .env com suas configurações
-
-# Iniciar em desenvolvimento
-npm run dev
-
-# Rodar testes
-npm test
-
-# Rodar lint
-npm run lint
 ```
 
-### Frontend
+3. Inicie os serviços com Docker Compose:
 ```bash
-# Entrar no diretório do frontend
-cd client
+docker-compose up -d
+```
 
-# Instalar dependências
+## 🚀 Executando os Projetos
+
+### Sistema de Autenticação
+```bash
+cd auth-service
 npm install
-
-# Iniciar em desenvolvimento
 npm run dev
-
-# Rodar testes
-npm test
-
-# Rodar testes com cobertura
-npm run test:coverage
-
-# Rodar lint
-npm run lint
 ```
 
-## 🧪 Testes
-
-### Backend
-Os testes do backend são escritos com Jest e Supertest. Para executar:
-
+### E-commerce
 ```bash
-cd server
-npm test
+cd ecommerce-service
+python -m venv .venv
+source .venv/bin/activate  # ou .venv\Scripts\activate no Windows
+pip install -r requirements.txt
+python app.py
 ```
 
-### Frontend
-Os testes do frontend são escritos com Vitest e React Testing Library. Para executar:
-
+### Sistema Bancário
 ```bash
-cd client
-npm test
+cd bank-service
+go mod download
+go run main.go
 ```
 
-Para ver a cobertura de testes:
+### API Gateway
 ```bash
-npm run test:coverage
+cd api-gateway
+npm install
+npm run dev
 ```
-
-## 🔄 CI/CD
-
-O projeto usa GitHub Actions para CI/CD. O pipeline inclui:
-
-1. **Testes e Build**
-   - Instalação de dependências
-   - Execução de testes (frontend e backend)
-   - Build do projeto
-   - Linting
-
-2. **Deploy** (apenas na branch main)
-   - Deploy do backend
-   - Deploy do frontend
-
-### Secrets Necessárias
-Configure as seguintes secrets no GitHub:
-- `MONGODB_URI_TEST`: URI do MongoDB para testes
-- `JWT_SECRET_TEST`: Chave secreta para JWT em testes
-- `SSH_PRIVATE_KEY`: Chave SSH para deploy
-- `SSH_HOST`: Host do servidor de produção
 
 ## 📝 Estrutura do Projeto
 
 ```
-meu-projeto/
-├── client/              → Frontend (React + Vite + Tailwind)
-│   ├── public/
-│   ├── src/
-│   │   ├── assets/
-│   │   ├── components/
-│   │   │   └── ProtectedRoute.tsx
-│   │   ├── pages/
-│   │   │   ├── Login.tsx
-│   │   │   ├── Signup.tsx
-│   │   │   └── Dashboard.tsx
-│   │   ├── test/
-│   │   │   └── setup.ts
-│   │   ├── App.tsx
-│   │   ├── main.tsx
-│   │   └── index.css
-│   ├── tailwind.config.js
-│   ├── postcss.config.js
-│   ├── vite.config.ts
-│   ├── vitest.config.ts
-│   ├── tsconfig.json
-│   └── package.json
+projetos-integrados/
+├── auth-service/           → Sistema de Autenticação
+│   ├── client/            → Frontend React
+│   └── server/            → Backend Node.js
 │
-├── server/              → Backend (Node + Express + MongoDB)
-│   ├── controllers/
-│   │   └── authController.js
-│   ├── middleware/
-│   │   ├── authMiddleware.js
-│   │   ├── errorMiddleware.js
-│   │   └── validationMiddleware.js
-│   ├── models/
-│   │   └── User.js
-│   ├── routes/
-│   │   └── authRoutes.js
-│   ├── validations/
-│   │   └── authValidation.js
-│   ├── .env
-│   ├── app.js
-│   ├── server.js
-│   └── package.json
+├── ecommerce-service/      → E-commerce
+│   ├── frontend/          → Frontend HTML/CSS/JS
+│   └── backend/           → Backend Python
 │
-└── .github/
-    └── workflows/
-        └── ci-cd.yml
+├── bank-service/          → Sistema Bancário
+│   ├── handlers/          → Handlers HTTP
+│   ├── models/            → Modelos de dados
+│   └── db/                → Configuração do banco
+│
+├── api-gateway/           → API Gateway
+│   ├── routes/            → Rotas da API
+│   └── middleware/        → Middlewares
+│
+├── docker/                → Configurações Docker
+│   ├── nginx/             → Configuração Nginx
+│   └── databases/         → Configurações dos bancos
+│
+└── docs/                  → Documentação
+    ├── api/               → Documentação da API
+    └── architecture/      → Arquitetura do sistema
 ```
 
-## 🔒 Segurança
+## 🔄 CI/CD
 
-- Validação de dados com Yup
-- Autenticação com JWT
-- Senhas criptografadas com Bcrypt
-- Proteção contra CSRF
-- Rate limiting
-- Sanitização de inputs
+O projeto utiliza GitHub Actions para:
+- Testes automatizados
+- Build dos containers
+- Deploy automático
+- Análise de código
 
 ## 📄 Licença
 

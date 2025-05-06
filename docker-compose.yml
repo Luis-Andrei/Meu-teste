@@ -1,0 +1,140 @@
+version: '3.8'
+
+services:
+  # API Gateway
+  api-gateway:
+    build:
+      context: ./api-gateway
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      - NODE_ENV=development
+      - AUTH_SERVICE_URL=http://auth-service:3000
+      - ECOMMERCE_SERVICE_URL=http://ecommerce-service:5000
+      - BANK_SERVICE_URL=http://bank-service:8081
+    depends_on:
+      - auth-service
+      - ecommerce-service
+      - bank-service
+    networks:
+      - app-network
+
+  # Serviço de Autenticação
+  auth-service:
+    build:
+      context: ./auth-service/server
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=development
+      - MONGODB_URI=mongodb://mongodb:27017/auth
+      - JWT_SECRET=your_jwt_secret
+    depends_on:
+      - mongodb
+    networks:
+      - app-network
+
+  # Serviço de E-commerce
+  ecommerce-service:
+    build:
+      context: ./ecommerce-service/backend
+      dockerfile: Dockerfile
+    ports:
+      - "5000:5000"
+    environment:
+      - FLASK_ENV=development
+      - MONGODB_URI=mongodb://mongodb:27017/ecommerce
+    depends_on:
+      - mongodb
+    networks:
+      - app-network
+
+  # Serviço Bancário
+  bank-service:
+    build:
+      context: ./bank-service
+      dockerfile: Dockerfile
+    ports:
+      - "8081:8081"
+    environment:
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_USER=postgres
+      - DB_PASSWORD=postgres
+      - DB_NAME=bank
+    depends_on:
+      - postgres
+    networks:
+      - app-network
+
+  # Frontend do Sistema de Autenticação
+  auth-frontend:
+    build:
+      context: ./auth-service/client
+      dockerfile: Dockerfile
+    ports:
+      - "3001:3001"
+    environment:
+      - VITE_API_URL=http://localhost:8080
+    networks:
+      - app-network
+
+  # Frontend do E-commerce
+  ecommerce-frontend:
+    build:
+      context: ./ecommerce-service/frontend
+      dockerfile: Dockerfile
+    ports:
+      - "3002:3002"
+    environment:
+      - VITE_API_URL=http://localhost:8080
+    networks:
+      - app-network
+
+  # Nginx como proxy reverso
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "80:80"
+    volumes:
+      - ./docker/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - api-gateway
+      - auth-frontend
+      - ecommerce-frontend
+    networks:
+      - app-network
+
+  # MongoDB
+  mongodb:
+    image: mongo:latest
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+    networks:
+      - app-network
+
+  # PostgreSQL
+  postgres:
+    image: postgres:latest
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=bank
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  mongodb_data:
+  postgres_data: 
